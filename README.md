@@ -1,6 +1,6 @@
-# CASS Backend - Charger After-Service System API
+# TARDIS CASS Backend - Charger After-Service System API
 
-FastAPI-based backend for the Charger After-Service System (CASS).
+FastAPI-based backend for the TARDIS CASS (Charger After-Service System).
 
 ## Tech Stack
 
