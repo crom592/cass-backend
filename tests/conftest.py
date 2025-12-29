@@ -363,13 +363,15 @@ class WorklogFactory:
         is_internal: bool = False,
         time_spent_minutes: int = 30
     ) -> Worklog:
+        # Note: is_internal in model is defined as String, not Boolean
+        # Converting to string for compatibility
         worklog = Worklog(
             id=str(uuid.uuid4()),
             ticket_id=ticket_id,
             author_id=author_id,
             body=body,
             work_type=work_type,
-            is_internal=is_internal,
+            is_internal=str(is_internal) if isinstance(is_internal, bool) else is_internal,
             time_spent_minutes=time_spent_minutes
         )
         db.add(worklog)

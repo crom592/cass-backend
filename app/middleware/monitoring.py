@@ -263,6 +263,14 @@ class MonitoringMiddleware(BaseHTTPMiddleware):
         return response
 
 
+class RequestIDFormatter(logging.Formatter):
+    """Standard formatter that ensures request_id is always present."""
+    def format(self, record):
+        if not hasattr(record, "request_id"):
+            record.request_id = "no-request"
+        return super().format(record)
+
+
 class StructuredJsonFormatter(logging.Formatter):
     """
     JSON formatter for structured logging.
@@ -328,9 +336,8 @@ def configure_structured_logging(log_level: str = "INFO", json_format: bool = Tr
         console_handler.setFormatter(StructuredJsonFormatter())
     else:
         console_handler.setFormatter(
-            logging.Formatter(
-                "%(asctime)s - %(name)s - %(levelname)s - [%(request_id)s] %(message)s",
-                defaults={"request_id": "no-request"}
+            RequestIDFormatter(
+                "%(asctime)s - %(name)s - %(levelname)s - [%(request_id)s] %(message)s"
             )
         )
 
