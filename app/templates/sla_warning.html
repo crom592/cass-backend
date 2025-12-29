@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLA Warning</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            border-bottom: 2px solid #ffc107;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #856404;
+            margin: 0;
+            font-size: 24px;
+        }
+        .ticket-number {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .warning-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .warning-icon {
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .warning-title {
+            color: #856404;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .warning-message {
+            color: #856404;
+            text-align: center;
+        }
+        .countdown {
+            background-color: #fff;
+            border: 1px solid #ffeeba;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 15px;
+            text-align: center;
+        }
+        .countdown-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #856404;
+        }
+        .countdown-label {
+            font-size: 14px;
+            color: #666;
+        }
+        .info-section {
+            margin: 20px 0;
+        }
+        .info-row {
+            display: flex;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #666;
+            width: 140px;
+            flex-shrink: 0;
+        }
+        .info-value {
+            color: #333;
+        }
+        .priority-critical {
+            background-color: #dc3545;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .priority-high {
+            background-color: #fd7e14;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .priority-medium {
+            background-color: #ffc107;
+            color: #333;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .priority-low {
+            background-color: #28a745;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .action-required {
+            background-color: #e2e3e5;
+            border: 1px solid #d6d8db;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .action-required h3 {
+            margin-top: 0;
+            color: #383d41;
+            font-size: 14px;
+        }
+        .action-required ul {
+            margin-bottom: 0;
+            color: #383d41;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #ffc107;
+            color: #212529;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #e0a800;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>SLA Warning</h1>
+            <span class="ticket-number">{{ ticket_number }}</span>
+        </div>
+
+        <div class="warning-box">
+            <div class="warning-icon">&#9888;</div>
+            <div class="warning-title">SLA Breach Approaching</div>
+            <div class="warning-message">
+                This ticket is approaching its SLA deadline. Action is needed to prevent a breach.
+            </div>
+
+            <div class="countdown">
+                <div class="countdown-value">{{ minutes_remaining }} minutes</div>
+                <div class="countdown-label">until {{ breach_type }} SLA breach</div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <div class="info-row">
+                <span class="info-label">Title:</span>
+                <span class="info-value">{{ title }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Category:</span>
+                <span class="info-value">{{ category }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Priority:</span>
+                <span class="info-value">
+                    <span class="priority-{{ priority | lower }}">{{ priority | upper }}</span>
+                </span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Current Status:</span>
+                <span class="info-value">{{ status }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Site:</span>
+                <span class="info-value">{{ site_name }}</span>
+            </div>
+            {% if assignee_name %}
+            <div class="info-row">
+                <span class="info-label">Assigned To:</span>
+                <span class="info-value">{{ assignee_name }}</span>
+            </div>
+            {% endif %}
+            <div class="info-row">
+                <span class="info-label">SLA Target:</span>
+                <span class="info-value">{{ sla_target_time }}</span>
+            </div>
+        </div>
+
+        <div class="action-required">
+            <h3>Recommended Actions:</h3>
+            <ul>
+                <li>Review the current ticket status and progress</li>
+                <li>Prioritize this ticket to meet the SLA deadline</li>
+                <li>Request additional resources if needed</li>
+                <li>Update the ticket with your current progress</li>
+            </ul>
+        </div>
+
+        <a href="{{ ticket_url }}" class="btn">View Ticket</a>
+
+        <div class="footer">
+            <p>This is an automated SLA warning notification from CASS (Charging Asset Service System).</p>
+            <p>You are receiving this because you are responsible for this ticket.</p>
+        </div>
+    </div>
+</body>
+</html>
