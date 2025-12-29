@@ -153,3 +153,50 @@ class SchedulerStatusResponse(BaseModel):
     """Response schema for scheduler status."""
     status: str
     jobs: List[Dict[str, Any]]
+
+
+# New schemas for frontend integration
+
+class ReportStatsResponse(BaseModel):
+    """Response schema for report statistics."""
+    total_tickets: int = Field(description="Total tickets in period")
+    total_trend: float = Field(description="Percentage change from previous period")
+    resolved_count: int = Field(description="Number of resolved tickets")
+    resolved_trend: float = Field(description="Percentage change in resolved tickets")
+    sla_breach_rate: float = Field(description="SLA breach rate as percentage")
+    sla_trend: float = Field(description="Percentage change in SLA breach rate")
+    avg_resolution_time: float = Field(description="Average resolution time in hours")
+    time_trend: float = Field(description="Percentage change in resolution time")
+
+
+class ReportTrendsResponse(BaseModel):
+    """Response schema for ticket trends over time."""
+    labels: List[str] = Field(description="Date labels for the trend")
+    values: List[int] = Field(description="Ticket counts for each date")
+
+
+class DistributionItem(BaseModel):
+    """Single item in a distribution breakdown."""
+    name: str = Field(description="Category/Priority/Status name")
+    count: int = Field(description="Number of tickets")
+    percentage: float = Field(description="Percentage of total")
+
+
+class ReportDistributionResponse(BaseModel):
+    """Response schema for ticket distribution."""
+    by_category: List[DistributionItem] = Field(description="Distribution by category")
+    by_priority: List[DistributionItem] = Field(description="Distribution by priority")
+
+
+class SnapshotTableRow(BaseModel):
+    """Single row in the snapshots table."""
+    date: str = Field(description="Snapshot date")
+    total: int = Field(description="Total tickets")
+    resolved: int = Field(description="Resolved tickets")
+    breached: int = Field(description="SLA breached tickets")
+    avgTime: int = Field(description="Average resolution time in minutes")
+
+
+class ReportSnapshotsResponse(BaseModel):
+    """Response schema for recent snapshots table."""
+    snapshots: List[SnapshotTableRow] = Field(description="List of snapshot rows")
