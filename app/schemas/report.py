@@ -190,6 +190,7 @@ class ReportDistributionResponse(BaseModel):
 
 class SnapshotTableRow(BaseModel):
     """Single row in the snapshots table."""
+    id: str = Field(description="Snapshot ID")
     date: str = Field(description="Snapshot date")
     total: int = Field(description="Total tickets")
     resolved: int = Field(description="Resolved tickets")

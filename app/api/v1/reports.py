@@ -303,6 +303,7 @@ async def get_recent_snapshots(
         avg_hours = metrics.get('avg_resolution_time_hours', 0)
         
         rows.append(SnapshotTableRow(
+            id=snapshot.id,
             date=snapshot.period_start.strftime('%Y-%m-%d'),
             total=total,
             resolved=resolved,
